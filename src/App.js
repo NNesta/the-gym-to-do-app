@@ -8,8 +8,10 @@ function App() {
   );
 
   const [todo, setTodo] = useState("");
+  const [error, setError] = useState(false);
 
   const handleChange = (e) => {
+    setError(false);
     setTodo(e.target.value);
   };
   const deleteTask = (index) => {
@@ -26,18 +28,28 @@ function App() {
     localStorage.setItem("todos", JSON.stringify(todos));
   };
   const handleClick = (e) => {
-    setTodos([...todos, { task: todo, completed: false }]);
-    localStorage.setItem("todos", JSON.stringify(todos));
+    if (todo.trim().length <= 0) {
+      setError(true);
+    } else {
+      const newTodo = [{ task: todo, completed: false }, ...todos];
+      setTodos(newTodo);
+      localStorage.setItem("todos", JSON.stringify(newTodo));
+      console.log("hELLO");
+    }
   };
   console.log(todos);
   return (
     <main className="max-w-[600px] mx-auto">
       <h1 className="text-7xl font-bold text-[#EBEBEB] text-center">todos</h1>
-      <div className="flex items-center justify-between border rounded-full px-4">
+      <div
+        className={`flex items-center justify-between shadow-3xl m-4 rounded-full px-4 ${
+          error && "border-red-500 border"
+        }`}
+      >
         <input
           onChange={handleChange}
           value={todo}
-          className="px-4 py-2 focus:outline-none"
+          className="px-4 py-2 focus:outline-none flex-1"
           placeholder="add todo..."
         />
 
@@ -47,14 +59,27 @@ function App() {
         />
       </div>
 
-      <ul className="">
-        {todos.map((item, index) => (
-          <li className="flex items-center gap-4  border py-2 my-2">
-            <input type="checkbox" onChange={() => handleCheck(index)} />
-            <p className={`flex-1 ${item.completed && "line-through"}`}>
+      <ul className="max-w-full">
+        {todos.reverse().map((item, index) => (
+          <li className="flex items-center gap-4  border-b py-2 my-4">
+            <input
+              type="checkbox"
+              className="w-8 "
+              onChange={() => handleCheck(index)}
+            />
+            <p
+              className={`flex-1 whitespace-wrap  ${
+                item.completed && "line-through"
+              }`}
+            >
               {item.task}
             </p>
-            <MdDelete onClick={() => deleteTask(index)} />
+            <div
+              onClick={() => deleteTask(index)}
+              className="p-2 rounded-full cursor-pointer hover:bg-gray-200"
+            >
+              <MdDelete size={20} className="text-red-500" />
+            </div>
           </li>
         ))}
       </ul>
