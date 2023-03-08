@@ -34,10 +34,8 @@ function App() {
       const newTodo = [{ task: todo, completed: false }, ...todos];
       setTodos(newTodo);
       localStorage.setItem("todos", JSON.stringify(newTodo));
-      console.log("hELLO");
     }
   };
-  console.log(todos);
   return (
     <main className="max-w-[600px] mx-auto">
       <h1 className="text-7xl font-bold text-[#EBEBEB] text-center">todos</h1>
@@ -60,7 +58,7 @@ function App() {
       </div>
 
       <ul className="max-w-full">
-        {todos.reverse().map((item, index) => (
+        {todos.map((item, index) => (
           <li className="flex items-center gap-4  border-b py-2 my-4">
             <input
               type="checkbox"
