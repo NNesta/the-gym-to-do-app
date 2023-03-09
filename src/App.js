@@ -4,30 +4,33 @@ import { MdDelete } from "react-icons/md";
 
 function App() {
   const [todos, setTodos] = useState(
-    JSON.parse(localStorage.getItem("todos")) || []
+    () => JSON.parse(localStorage.getItem("todos")) || []
   );
 
   const [todo, setTodo] = useState("");
   const [error, setError] = useState(false);
 
   const handleChange = (e) => {
+    // This function is called when the user types in the input field
     setError(false);
     setTodo(e.target.value);
   };
   const deleteTask = (index) => {
+    // This function is called when the user clicks on the delete icon to delete a todo item
     const newTodos = [...todos];
     newTodos.splice(index, 1);
     setTodos(newTodos);
     localStorage.setItem("todos", JSON.stringify(todos));
   };
   const handleCheck = (index) => {
-    console.log("index", index);
+    // This function is called when the user clicks on the checkbox to mark a todo item as completed
     const newTodos = [...todos];
     newTodos[index].completed = !newTodos[index].completed;
     setTodos(newTodos);
-    localStorage.setItem("todos", JSON.stringify(todos));
+    localStorage.setItem("todos", JSON.stringify(newTodos));
   };
   const handleClick = (e) => {
+    //This function is called when the user clicks on the plus icon to add a new todo item
     if (todo.trim().length <= 0) {
       setError(true);
     } else {
@@ -37,8 +40,10 @@ function App() {
     }
   };
   return (
-    <main className="max-w-[600px] mx-auto">
-      <h1 className="text-7xl font-bold text-[#EBEBEB] text-center">todos</h1>
+    <main className="max-w-5xl mx-auto">
+      <h1 className="text-7xl max font-bold text-current-900 text-center">
+        todos
+      </h1>
       <div
         className={`flex items-center justify-between shadow-3xl m-4 rounded-full px-4 ${
           error && "border-red-500 border"
@@ -53,25 +58,22 @@ function App() {
 
         <BsPlusCircleFill
           onClick={() => handleClick()}
-          className="text-[#008C8E]"
+          className="text-current-500"
         />
       </div>
 
-      <ul className="max-w-full">
+      <ul className="">
         {todos.map((item, index) => (
           <li className="flex items-center gap-4  border-b py-2 my-4">
             <input
               type="checkbox"
               className="w-8 "
+              checked={item.completed}
               onChange={() => handleCheck(index)}
             />
-            <p
-              className={`flex-1 whitespace-wrap  ${
-                item.completed && "line-through"
-              }`}
-            >
-              {item.task}
-            </p>
+            <div className={`flex-1 ${item.completed && "line-through"}`}>
+              <p className="text-lg break-all">{item.task}</p>
+            </div>
             <div
               onClick={() => deleteTask(index)}
               className="p-2 rounded-full cursor-pointer hover:bg-gray-200"
