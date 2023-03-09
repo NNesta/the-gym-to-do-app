@@ -3,71 +3,71 @@ import { BsPlusCircleFill } from "react-icons/bs";
 import { MdDelete } from "react-icons/md";
 
 function App() {
-  const [todos, setTodos] = useState(
-    () => JSON.parse(localStorage.getItem("todos")) || []
+  const [todoList, setTodoList] = useState(
+    () => JSON.parse(localStorage.getItem("todoList")) || []
   );
 
-  const [todo, setTodo] = useState("");
-  const [error, setError] = useState(false);
+  const [todoText, setTodoText] = useState("");
+  const [invalidInput, setInvalidInput] = useState(false);
 
-  const handleChange = (e) => {
+  const handleChange = (event) => {
     // This function is called when the user types in the input field
-    setError(false);
-    setTodo(e.target.value);
+    setInvalidInput(false);
+    setTodoText(event.target.value);
   };
-  const deleteTask = (index) => {
-    // This function is called when the user clicks on the delete icon to delete a todo item
-    const newTodos = [...todos];
-    newTodos.splice(index, 1);
-    setTodos(newTodos);
-    localStorage.setItem("todos", JSON.stringify(todos));
+  const deleteTask = (taskIndex) => {
+    // This function is called when the user clicks on the delete icon to delete a todoText item
+    console.log(taskIndex);
+    const newTodoList = [...todoList];
+    newTodoList.splice(taskIndex, 1);
+    setTodoList(newTodoList);
+    localStorage.setItem("todoList", JSON.stringify(newTodoList));
   };
-  const handleCheck = (index) => {
-    // This function is called when the user clicks on the checkbox to mark a todo item as completed
-    const newTodos = [...todos];
-    newTodos[index].completed = !newTodos[index].completed;
-    setTodos(newTodos);
-    localStorage.setItem("todos", JSON.stringify(newTodos));
+  const handleCheck = (taskIndex) => {
+    // This function is called when the user clicks on the checkbox to mark a todoText item as completed
+    const newTodoList = [...todoList];
+    newTodoList[taskIndex].completed = !newTodoList[taskIndex].completed;
+    setTodoList(newTodoList);
+    localStorage.setItem("todoList", JSON.stringify(newTodoList));
   };
-  const handleClick = (e) => {
-    //This function is called when the user clicks on the plus icon to add a new todo item
-    if (todo.trim().length <= 0) {
-      setError(true);
+  const handleClick = () => {
+    //This function is called when the user clicks on the plus icon to add a new todoText item in the list
+    if (todoText.trim().length <= 0) {
+      setInvalidInput(true);
     } else {
-      const newTodo = [{ task: todo, completed: false }, ...todos];
-      setTodos(newTodo);
-      localStorage.setItem("todos", JSON.stringify(newTodo));
+      const newTask = [{ task: todoText, completed: false }, ...todoList];
+      setTodoList(newTask);
+      localStorage.setItem("todoList", JSON.stringify(newTask));
     }
   };
   return (
-    <main className="max-w-5xl mx-auto">
+    <main className="max-w-5xl mx-auto px-2">
       <h1 className="text-7xl max font-bold text-current-900 text-center">
         todos
       </h1>
       <div
         className={`flex items-center justify-between shadow-3xl m-4 rounded-full px-4 ${
-          error && "border-red-500 border"
+          invalidInput && "border-red-500 border"
         }`}
       >
         <input
           onChange={handleChange}
-          value={todo}
+          value={todoText}
           className="px-4 py-2 focus:outline-none flex-1"
-          placeholder="add todo..."
+          placeholder="add todoText..."
         />
 
-        <BsPlusCircleFill
-          onClick={() => handleClick()}
-          className="text-current-500"
-        />
+        <BsPlusCircleFill onClick={handleClick} className="text-current-500" />
       </div>
 
-      <ul className="">
-        {todos.map((item, index) => (
-          <li className="flex items-center gap-4  border-b py-2 my-4">
+      <ul>
+        {todoList.map((item, index) => (
+          <li
+            key={index}
+            className="flex items-center gap-4  border-b py-2 my-4"
+          >
             <input
               type="checkbox"
-              className="w-8 "
               checked={item.completed}
               onChange={() => handleCheck(index)}
             />
