@@ -17,7 +17,6 @@ function App() {
   };
   const deleteTask = (taskIndex) => {
     // This function is called when the user clicks on the delete icon to delete a todoText item
-    console.log(taskIndex);
     const newTodoList = [...todoList];
     newTodoList.splice(taskIndex, 1);
     setTodoList(newTodoList);
