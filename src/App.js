@@ -11,31 +11,28 @@ function App() {
   const [invalidInput, setInvalidInput] = useState(false);
 
   const handleChange = (event) => {
-    // This function is called when the user types in the input field
     setInvalidInput(false);
     setTodoText(event.target.value);
   };
   const deleteTask = (taskIndex) => {
-    // This function is called when the user clicks on the delete icon to delete a todoText item
     const newTodoList = [...todoList];
     newTodoList.splice(taskIndex, 1);
     setTodoList(newTodoList);
     localStorage.setItem("todoList", JSON.stringify(newTodoList));
   };
   const handleCheck = (taskIndex) => {
-    // This function is called when the user clicks on the checkbox to mark a todoText item as completed
     const newTodoList = [...todoList];
     newTodoList[taskIndex].completed = !newTodoList[taskIndex].completed;
     setTodoList(newTodoList);
     localStorage.setItem("todoList", JSON.stringify(newTodoList));
   };
   const handleClick = () => {
-    //This function is called when the user clicks on the plus icon to add a new todoText item in the list
     if (todoText.trim().length <= 0) {
       setInvalidInput(true);
     } else {
       const newTask = [{ task: todoText, completed: false }, ...todoList];
       setTodoList(newTask);
+      setTodoText("");
       localStorage.setItem("todoList", JSON.stringify(newTask));
     }
   };
@@ -54,9 +51,19 @@ function App() {
           value={todoText}
           className="px-4 py-2 focus:outline-none flex-1"
           placeholder="add todoText..."
+          onKeyDown={(event) => {
+            if (event.key === "Enter") {
+              handleClick();
+            }
+          }}
         />
 
-        <BsPlusCircleFill onClick={handleClick} className="text-current-500" />
+        {todoText && (
+          <BsPlusCircleFill
+            onClick={handleClick}
+            className="text-current-500 text-xl hover:scale-110 cursor-pointer"
+          />
+        )}
       </div>
 
       <ul>
