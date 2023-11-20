@@ -70,14 +70,17 @@ function App() {
         {todoList.map((item, index) => (
           <li
             key={index}
-            className="flex items-center gap-4  border-b py-2 my-4"
+            className="flex items-center gap-4  border-b py-2 my-4 cursor-pointer"
           >
             <input
               type="checkbox"
               checked={item.completed}
               onChange={() => handleCheck(index)}
             />
-            <div className={`flex-1 ${item.completed && "line-through"}`}>
+            <div
+              onClick={() => handleCheck(index)}
+              className={`flex-1 ${item.completed && "line-through"}`}
+            >
               <p className="text-lg break-all">{item.task}</p>
             </div>
             <div
